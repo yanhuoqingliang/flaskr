@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Remote Screen</title>
+</head>
+<body>
+    <canvas id="screenCanvas"></canvas>
+
+    <script>
+        var ws = new WebSocket('ws://localhost:5000/screen');
+
+        ws.binaryType = 'arraybuffer';
+
+        var canvas = document.getElementById('screenCanvas');
+        var ctx = canvas.getContext('2d');
+
+        ws.onmessage = function(event) {
+            var imageData = new Uint8ClampedArray(event.data);
+            var imageDataArray = new ImageData(imageData, 1920, 1080);
+            ctx.putImageData(imageDataArray, 0, 0);
+        };
+    </script>
+</body>
+</html>
